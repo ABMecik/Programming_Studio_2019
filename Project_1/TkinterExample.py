@@ -28,6 +28,7 @@ for r in range(2):
         else:
             Label(root, bg='white', text="test").grid(row=r, column=c, padx=(xSize*2/9)-15, pady=(ySize*2/6))
 
+
 #Opening an image
 def openImage():
     try:
@@ -42,6 +43,7 @@ def openImage():
 
     imageProcess()
 
+
 def imageProcess():
     global openedImage
     nCol, nRow = openedImage.size
@@ -52,7 +54,8 @@ def imageProcess():
     colorMap = openedImage.load() # Images to pixel map because of converting return average of RGB
 
     global framedImage
-    framedImage = Image.new('RGB', ((nCol+2), (nRow+2)), color='black').convert('1', dither=Image.NONE) #Creates an image with 2 additional columns and rows for framing edges
+    # Creates an image with 2 additional columns and rows for framing edges
+    framedImage = Image.new('RGB', ((nCol+2), (nRow+2)), color='black').convert('1', dither=Image.NONE)
     #convert 1 : black white image
     #convert L : gray scaled image
 
@@ -67,7 +70,6 @@ def imageProcess():
     print("-------------------------------------------")
     print("Framed Image size : \nHorizontal : ", nCol, "\nVertical : ", nRow)
     print("-------------------------------------------")
-
 
     global binaryImage
     binaryImage = [[0 for x in range(nCol)] for y in range(nRow)]  # Set pixelValue sizes
@@ -88,39 +90,40 @@ def imageProcess():
 
     # Putting image to screen
     global img1
-    defImg = ImageTk.PhotoImage(framedImage) # for absulute img or path u can use file=[path] and any os seperator : os.path.sep
+    defImg = ImageTk.PhotoImage(framedImage)
     img1.config(image=defImg)
     img1.image = defImg
     img1.update()
 
 
-
 def reset():
     print("")
+
 
 def writeBinaryToScreen():
     global binaryCanvas
     global pixelMapAsString
     fontSize = 3
 
-    binaryCanvas.create_text(0,0, text=pixelMapAsString, font=("Times New Roman", fontSize, "bold"), tag="lvTag", anchor=NW)  # "Times New Roman" , "bold"
+    binaryCanvas.create_text(0,0, text=pixelMapAsString, font=("Ariel", fontSize, "bold"), tag="lvTag", anchor=NW)
+    # anchor North West is used to position the image to top left corner
+    # 0,0 gives relative position to anchor
+
     # for remove text from canvas use tag
     #binaryCanvas.select_clear()
     #binaryCanvas.delete("lvTag")
 
-    #for update u can remove and write text for every iteration
+    #for update you can remove and write text for every iteration
     binaryCanvas.update()
+
 
 writeBinaryButton = Button(root, text='Binary', borderwidth=1, command=writeBinaryToScreen, relief=RAISED)
 writeBinaryButton.grid(row=0, column=1, sticky=NE, padx=20, pady=20)
 
-
 selectButton = Button(root, text='Open', borderwidth=1, command=openImage, relief=RAISED)
-#selectButtonImage = ImageTk.PhotoImage([path])  # for any os seperator : os.path.sep
-#selectButton.config(image=lvButtonTabImg)
-#selectButton.image = lvButtonTabImg
 selectButton.grid(row=0, column=0, sticky=NW, padx=20, pady=20)
 
+# You should use canvas to edit text in label
 binaryCanvas = Canvas(root, borderwidth=2, bg="white", bd=3, relief="groove")
 binaryCanvas.grid(row=1, column=1, sticky=W + E + N + S)
 
